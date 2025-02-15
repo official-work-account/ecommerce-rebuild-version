@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./assets/index.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // css1 - css1 or css2 can be used
+// import "./assets/styles/bootstrap.custom.css"; // css2
+import "./assets/styles/index.css"; // must always be kept on
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -18,7 +19,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
-      <Route path="/products" element={<ProductsScreen />} />
+      <Route path="/product/:id" element={<ProductsScreen />} />
     </Route>
   )
 );
