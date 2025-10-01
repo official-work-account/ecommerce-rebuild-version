@@ -29,9 +29,15 @@ const LoginScreen = () => {
     }
   }, [userInfo, redirect, navigate]);
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    console.log("submitted");
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
   };
 
   return (
@@ -59,14 +65,25 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary" className="mt-3">
+        <Button
+          type="submit"
+          variant="primary"
+          className="mt-3"
+          disabled={isLoading}
+        >
           Sign In
         </Button>
+
+        {isLoading && <Loader />}
       </Form>
 
       <Row className="py-3">
         <Col>
-          New Customer? <Link to="/register">Register</Link>
+          New Customer?{" "}
+          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+            {/* <Link to={`/register?redirect=${redirect}`}>Register</Link> */}
+            Register
+          </Link>
         </Col>
       </Row>
     </FormContainer>

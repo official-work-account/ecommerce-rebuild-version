@@ -6,7 +6,7 @@ import generateToken from "../utils/generateToken.js";
 // @desc            Auth User & get token
 // @route           POST /api/users/login
 // @access          Public
-// asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise).
+// asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise). Try/catch block can still be used with asyncHandler, like how it has been used in the "protect" function in the authMiddleware.js
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
