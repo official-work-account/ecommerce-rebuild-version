@@ -16,6 +16,7 @@ const authSlice = createSlice({
     },
     logout: (state, action) => {
       state.userInfo = null;
+      // state.cart = {}; // undergoing test observation
       localStorage.clear();
     },
   },
