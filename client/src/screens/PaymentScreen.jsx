@@ -13,20 +13,17 @@ const PaymentScreen = () => {
   const navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
-
-  // Testing code: shipping address not considered empty
-  // if (!shippingAddress) {
-  //   console.log("empty");
-  // } else {
-  //   console.log("contains address");
-  // }
+  const { shippingAddress, cartItems } = cart;
 
   useEffect(() => {
-    if (!shippingAddress) {
+    if (Object.keys(shippingAddress).length === 0) {
       navigate("/shipping");
     }
-  }, [shippingAddress, navigate]);
+
+    if (cartItems.length === 0) {
+      navigate("/");
+    }
+  }, [shippingAddress, cartItems, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
