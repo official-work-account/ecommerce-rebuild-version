@@ -18,9 +18,7 @@ const PaymentScreen = () => {
   useEffect(() => {
     if (Object.keys(shippingAddress).length === 0) {
       navigate("/shipping");
-    }
-
-    if (cartItems.length === 0) {
+    } else if (cartItems.length === 0) {
       navigate("/");
     }
   }, [shippingAddress, cartItems, navigate]);
