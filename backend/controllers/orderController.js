@@ -1,5 +1,5 @@
 import asyncHandler from "../middleware/asyncHandler.js";
-// import Order from "../models/orderModel.js";
+import Order from "../models/orderModel.js";
 // import products from "../data/products.js"; // temporary usage
 
 // NOTE:
@@ -8,7 +8,38 @@ import asyncHandler from "../middleware/asyncHandler.js";
 // @access          Private
 // asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise).
 const addOrderItems = asyncHandler(async (req, res) => {
-  res.send("add order items");
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    itemsPrice,
+    shippingPrice,
+    totalPrice,
+  } = req.body;
+
+  if (orderItems && orderItems.length === 0) {
+    res.status(400);
+    throw new Error("No order items");
+  } else {
+    const order = new Order({
+      orderItems: orderItems.map((orderItem) => ({
+        ...orderItem,
+        product: orderItem._id,
+        _id: undefined,
+      })),
+      user: req.user._id,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    });
+
+    const createdOrder = order.save();
+
+    res.status(201).json(createdOrder);
+  }
 });
 
 // NOTE:
@@ -17,7 +48,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access          Private
 // asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise).
 const getMyOrders = asyncHandler(async (req, res) => {
-  res.send("my orders");
+  const orders = await Order.find({ user: req.user._id });
+  res.status(200).json(orders);
 });
 
 // NOTE:
@@ -25,9 +57,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route           GET /api/orders/:id
 // @access          Private
 // asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise).
-const getOrderById = asyncHandler(async (req, res) => {
-  res.send("get order by id");
-});
+const getOrderById = asyncHandler(async (req, res) => {});
 
 // NOTE:
 // @desc            update order to paid
@@ -53,7 +83,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @access          Private/Admin
 // asyncHandler:    allows us to avoid using try/catch block for async functions (async functions returns a promise).
 const getOrders = asyncHandler(async (req, res) => {
-  res.send("get all orders");
+  const orders = await Order.find({});
+  res.status(200).json(orders);
 });
 
 export {
